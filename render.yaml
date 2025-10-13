@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: little-lemon-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        value: <TU_URI_DE_MONGODB_ATLAS>
