@@ -1,15 +1,25 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const app = express();
-const PORT = 3001;
 
-// Conexión a MongoDB
-mongoose.connect('mongodb://localhost:27017/reservaciones', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Conexión a MongoDB Atlas usando la variable de entorno
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('✅ Conectado a MongoDB Atlas');
+  })
+  .catch((err) => {
+    console.error('❌ Error al conectar a MongoDB:', err);
+    process.exit(1);
+  });
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
 
 // Modelo de reservación
 const Reserva = mongoose.model('Reserva', new mongoose.Schema({
@@ -21,9 +31,6 @@ const Reserva = mongoose.model('Reserva', new mongoose.Schema({
   guests: Number
 }));
 
-app.use(cors());
-app.use(bodyParser.json());
-
 // Ruta para guardar reservaciones
 app.post('/api/reservaciones', async (req, res) => {
   try {
@@ -31,10 +38,12 @@ app.post('/api/reservaciones', async (req, res) => {
     await nuevaReserva.save();
     res.status(200).send({ mensaje: 'Reservación guardada' });
   } catch (err) {
+    console.error('❌ Error al guardar la reservación:', err);
     res.status(500).send({ error: 'Error al guardar la reservación' });
   }
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
 });
