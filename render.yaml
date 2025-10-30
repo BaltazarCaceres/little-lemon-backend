@@ -3,9 +3,10 @@ services:
     name: little-lemon-backend
     env: node
     plan: free
+    rootDir: little-lemon-backend
     buildCommand: npm install
     startCommand: node server.js
     autoDeploy: true
     envVars:
       - key: MONGODB_URI
-        value: <TU_URI_DE_MONGODB_ATLAS>
+        value: mongodb+srv://LittleLemonAdmin:kylo2014@cluster0.xan2btq.mongodb.net/MiEmpresa?retryWrites=true&w=majority
