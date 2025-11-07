@@ -1,4 +1,8 @@
-require('dotenv').config();
+// Cargar variables de entorno solo en desarrollo
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({ path: '.env.local' });
+}
+
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
@@ -6,6 +10,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// 🔍 Verificar qué URI se está leyendo
+console.log('🔍 URI que se está usando:', process.env.MONGODB_URI);
 
 // Conexión a MongoDB Atlas usando la variable de entorno
 mongoose.connect(process.env.MONGODB_URI)
