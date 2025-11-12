@@ -50,6 +50,28 @@ app.post('/api/reservaciones', async (req, res) => {
   }
 });
 
+// Modelo de contacto
+const Contact = mongoose.model('Contact', new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String,
+  date: String,
+  time: String,
+  guests: Number
+}));
+
+// Ruta para guardar mensajes de contacto
+app.post('/contact', async (req, res) => {
+  try {
+    const nuevoMensaje = new Contact(req.body);
+    await nuevoMensaje.save();
+    res.status(201).send({ mensaje: 'Mensaje guardado con éxito' });
+  } catch (err) {
+    console.error('❌ Error al guardar el mensaje:', err);
+    res.status(500).send({ error: 'Error al guardar el mensaje' });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
