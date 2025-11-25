@@ -50,6 +50,17 @@ app.post('/api/reservaciones', async (req, res) => {
   }
 });
 
+// ✅ Nueva ruta GET para obtener todas las reservaciones
+app.get('/api/reservaciones', async (req, res) => {
+  try {
+    const reservas = await Reserva.find();
+    res.json(reservas);
+  } catch (err) {
+    console.error('❌ Error al obtener reservaciones:', err);
+    res.status(500).send({ error: 'Error al obtener reservaciones' });
+  }
+});
+
 // Modelo de contacto
 const Contact = mongoose.model('Contact', new mongoose.Schema({
   name: String,
@@ -61,7 +72,7 @@ const Contact = mongoose.model('Contact', new mongoose.Schema({
 }));
 
 // Ruta para guardar mensajes de contacto
-app.post('/contact', async (req, res) => {
+app.post('/api/contacto', async (req, res) => {
   try {
     const nuevoMensaje = new Contact(req.body);
     await nuevoMensaje.save();
@@ -69,6 +80,17 @@ app.post('/contact', async (req, res) => {
   } catch (err) {
     console.error('❌ Error al guardar el mensaje:', err);
     res.status(500).send({ error: 'Error al guardar el mensaje' });
+  }
+});
+
+// ✅ Nueva ruta GET para obtener todos los contactos
+app.get('/api/contacto', async (req, res) => {
+  try {
+    const contactos = await Contact.find();
+    res.json(contactos);
+  } catch (err) {
+    console.error('❌ Error al obtener contactos:', err);
+    res.status(500).send({ error: 'Error al obtener contactos' });
   }
 });
 
