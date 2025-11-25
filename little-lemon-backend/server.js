@@ -87,9 +87,6 @@ const Contact = mongoose.model('Contact', new mongoose.Schema({
   name: String,
   email: String,
   message: String,
-  date: String,
-  time: String,
-  guests: Number
 }));
 
 // Ruta para guardar mensajes de contacto (POST)
@@ -135,6 +132,22 @@ app.delete('/api/contacto/:id', async (req, res) => {
 // ==========================
 // 🚀 Iniciar servidor
 // ==========================
+
+// ==========================
+// 🌐 Endpoint raíz
+// ==========================
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>🍋 Bienvenido al Backend de Little Lemon 🍋</h1>
+    <p>El servidor está funcionando correctamente ✅</p>
+    <p>Rutas disponibles:</p>
+    <ul>
+      <li><a href="/api/reservaciones">/api/reservaciones</a></li>
+      <li><a href="/api/contacto">/api/contacto</a></li>
+    </ul>
+  `);
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
 });
