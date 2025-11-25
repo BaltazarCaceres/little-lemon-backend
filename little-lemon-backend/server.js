@@ -28,7 +28,9 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use(cors());
 app.use(bodyParser.json());
 
-// Modelo de reservación
+// ==========================
+// 📋 Modelo de reservación
+// ==========================
 const Reserva = mongoose.model('Reserva', new mongoose.Schema({
   name: String,
   email: String,
@@ -38,7 +40,7 @@ const Reserva = mongoose.model('Reserva', new mongoose.Schema({
   guests: Number
 }));
 
-// Ruta para guardar reservaciones
+// Ruta para guardar reservaciones (POST)
 app.post('/api/reservaciones', async (req, res) => {
   try {
     const nuevaReserva = new Reserva(req.body);
@@ -50,7 +52,7 @@ app.post('/api/reservaciones', async (req, res) => {
   }
 });
 
-// ✅ Nueva ruta GET para obtener todas las reservaciones
+// Ruta para obtener todas las reservaciones (GET)
 app.get('/api/reservaciones', async (req, res) => {
   try {
     const reservas = await Reserva.find();
@@ -61,7 +63,26 @@ app.get('/api/reservaciones', async (req, res) => {
   }
 });
 
-// Modelo de contacto
+// Ruta para eliminar una reservación por ID (DELETE)
+app.delete('/api/reservaciones/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reservaEliminada = await Reserva.findByIdAndDelete(id);
+
+    if (!reservaEliminada) {
+      return res.status(404).json({ error: 'Reservación no encontrada' });
+    }
+
+    res.json({ mensaje: 'Reservación eliminada con éxito' });
+  } catch (err) {
+    console.error('❌ Error al eliminar la reservación:', err);
+    res.status(500).json({ error: 'Error al eliminar la reservación' });
+  }
+});
+
+// ==========================
+// ✉️ Modelo de contacto
+// ==========================
 const Contact = mongoose.model('Contact', new mongoose.Schema({
   name: String,
   email: String,
@@ -71,7 +92,7 @@ const Contact = mongoose.model('Contact', new mongoose.Schema({
   guests: Number
 }));
 
-// Ruta para guardar mensajes de contacto
+// Ruta para guardar mensajes de contacto (POST)
 app.post('/api/contacto', async (req, res) => {
   try {
     const nuevoMensaje = new Contact(req.body);
@@ -83,7 +104,7 @@ app.post('/api/contacto', async (req, res) => {
   }
 });
 
-// ✅ Nueva ruta GET para obtener todos los contactos
+// Ruta para obtener todos los contactos (GET)
 app.get('/api/contacto', async (req, res) => {
   try {
     const contactos = await Contact.find();
@@ -94,7 +115,26 @@ app.get('/api/contacto', async (req, res) => {
   }
 });
 
-// Iniciar servidor
+// Ruta para eliminar un contacto por ID (DELETE)
+app.delete('/api/contacto/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const contactoEliminado = await Contact.findByIdAndDelete(id);
+
+    if (!contactoEliminado) {
+      return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
+
+    res.json({ mensaje: 'Contacto eliminado con éxito' });
+  } catch (err) {
+    console.error('❌ Error al eliminar el contacto:', err);
+    res.status(500).json({ error: 'Error al eliminar el contacto' });
+  }
+});
+
+// ==========================
+// 🚀 Iniciar servidor
+// ==========================
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
 });
